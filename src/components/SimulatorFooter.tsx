@@ -8,7 +8,7 @@ export function SimulatorFooter({ onReset }: SimulatorFooterProps) {
   return (
     <footer className="mt-auto flex flex-col items-center gap-2 px-3 pb-4 pt-2 sm:flex-row sm:justify-between sm:px-4">
       <p className="order-2 text-[10px] text-[#555] sm:order-1">
-        © 2026 MERIDIAN STRATEGIC SYSTEMS
+        © 2026 LOCUST CONSULTING
       </p>
       <button
         type="button"

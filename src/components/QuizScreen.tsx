@@ -8,6 +8,7 @@ import { SimulatorFooter } from "@/components/SimulatorFooter";
 import { SimulatorHeader } from "@/components/SimulatorHeader";
 import { SimulatorHero } from "@/components/SimulatorHero";
 import { HSP_QUIZ_COUNT, HSP_QUIZ_ITEMS } from "@/data/hsp-quiz";
+import { useTypewriter } from "@/hooks/useTypewriter";
 import { useSimulatorStore } from "@/store/simulator-store";
 
 type QuizScreenProps = {
@@ -28,6 +29,10 @@ export function QuizScreen({ questionNum }: QuizScreenProps) {
 
   const index = questionNum - 1;
   const prompt = HSP_QUIZ_ITEMS[index];
+
+  const { displayed: typedPrompt, done: promptDone } = useTypewriter(
+    ready && prompt ? prompt : "",
+  );
 
   useEffect(() => {
     const unsub = useSimulatorStore.persist.onFinishHydration(() => {
@@ -66,6 +71,7 @@ export function QuizScreen({ questionNum }: QuizScreenProps) {
 
   const submitAnswer = useCallback(
     (value: boolean) => {
+      if (!promptDone) return;
       setHspAnswer(index, value);
       if (index >= HSP_QUIZ_COUNT - 1) {
         finalizeHspQuiz();
@@ -74,12 +80,12 @@ export function QuizScreen({ questionNum }: QuizScreenProps) {
         router.push(`/quiz/${index + 2}`);
       }
     },
-    [index, setHspAnswer, finalizeHspQuiz, router],
+    [index, setHspAnswer, finalizeHspQuiz, router, promptDone],
   );
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (aboutOpen) return;
+      if (aboutOpen || !promptDone) return;
       if (e.key === "1") {
         e.preventDefault();
         submitAnswer(true);
@@ -91,7 +97,7 @@ export function QuizScreen({ questionNum }: QuizScreenProps) {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [aboutOpen, submitAnswer]);
+  }, [aboutOpen, submitAnswer, promptDone]);
 
   const handleReset = () => {
     if (
@@ -112,7 +118,7 @@ export function QuizScreen({ questionNum }: QuizScreenProps) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-black font-mono text-[#e0e0e0]">
+    <div className="flex min-h-screen flex-col bg-black text-[#e0e0e0]">
       <SimulatorHeader onAbout={() => setAboutOpen(true)} />
 
       <SimulatorHero
@@ -128,22 +134,24 @@ export function QuizScreen({ questionNum }: QuizScreenProps) {
         Question {questionNum} / {HSP_QUIZ_COUNT}
       </p>
 
-      <div className="mx-3 mb-4 flex-1 border-0 bg-[#00ff00e6] px-4 py-4 text-sm leading-relaxed text-black sm:mx-4 sm:text-base">
-        <p className="whitespace-pre-wrap">{prompt}</p>
+      <div className="mx-3 mb-4 flex-1 border-0 bg-[#00ff00e6] px-4 py-4 font-panel text-sm leading-relaxed text-black sm:mx-4 sm:text-base">
+        <p className="whitespace-pre-wrap">{typedPrompt}</p>
       </div>
 
       <div className="mx-3 mb-4 flex flex-col gap-2 sm:mx-4">
         <button
           type="button"
+          disabled={!promptDone}
           onClick={() => submitAnswer(true)}
-          className="border-2 border-[#ff00ff] bg-black px-3 py-3 text-left text-[10px] leading-snug text-white transition-opacity hover:bg-[#1a0a1a] sm:text-xs"
+          className="font-panel border-2 border-[#ff00ff] bg-black px-3 py-3 text-left text-[10px] leading-snug text-white transition-opacity enabled:hover:bg-[#1a0a1a] disabled:cursor-not-allowed disabled:opacity-40 sm:text-xs"
         >
           <span className="text-[#ffff00]">[1]</span> True
         </button>
         <button
           type="button"
+          disabled={!promptDone}
           onClick={() => submitAnswer(false)}
-          className="border-2 border-[#ff00ff] bg-black px-3 py-3 text-left text-[10px] leading-snug text-white transition-opacity hover:bg-[#1a0a1a] sm:text-xs"
+          className="font-panel border-2 border-[#ff00ff] bg-black px-3 py-3 text-left text-[10px] leading-snug text-white transition-opacity enabled:hover:bg-[#1a0a1a] disabled:cursor-not-allowed disabled:opacity-40 sm:text-xs"
         >
           <span className="text-[#ffff00]">[2]</span> False
         </button>

@@ -9,10 +9,10 @@ import { SimulatorHeader } from "@/components/SimulatorHeader";
 import { SimulatorHero } from "@/components/SimulatorHero";
 import { LANDING_NARRATIVE } from "@/content/landing-narrative";
 import { FIRST_QUESTION_ID } from "@/data/question-bank";
+import { useTypewriter } from "@/hooks/useTypewriter";
 import { useSimulatorStore } from "@/store/simulator-store";
 
 const BAR_MS = 1200;
-const MS_PER_CHAR = 12;
 
 export function SimulatorLanding() {
   const router = useRouter();
@@ -27,8 +27,9 @@ export function SimulatorLanding() {
   const [displayEnergy, setDisplayEnergy] = useState(0);
   const [displaySuccess, setDisplaySuccess] = useState(0);
   const [barsDone, setBarsDone] = useState(false);
-  const [visibleChars, setVisibleChars] = useState(0);
-  const [typewriterDone, setTypewriterDone] = useState(false);
+
+  const { displayed: revealedText, done: typewriterDone } =
+    useTypewriter(LANDING_NARRATIVE);
 
   useEffect(() => {
     let cancelled = false;
@@ -54,20 +55,6 @@ export function SimulatorLanding() {
     };
   }, [targetEnergy, targetSuccess]);
 
-  useEffect(() => {
-    const text = LANDING_NARRATIVE;
-    let i = 0;
-    const id = window.setInterval(() => {
-      i += 1;
-      setVisibleChars(i);
-      if (i >= text.length) {
-        window.clearInterval(id);
-        setTypewriterDone(true);
-      }
-    }, MS_PER_CHAR);
-    return () => window.clearInterval(id);
-  }, []);
-
   const canStart = barsDone && typewriterDone;
 
   const goToNext = useCallback(() => {
@@ -91,8 +78,6 @@ export function SimulatorLanding() {
     return () => window.removeEventListener("keydown", onKey);
   }, [aboutOpen, canStart, goToNext]);
 
-  const revealedText = LANDING_NARRATIVE.slice(0, visibleChars);
-
   const handleReset = () => {
     if (
       typeof window !== "undefined" &&
@@ -103,7 +88,7 @@ export function SimulatorLanding() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-black font-mono text-[#e0e0e0]">
+    <div className="flex min-h-screen flex-col bg-black text-[#e0e0e0]">
       <SimulatorHeader onAbout={() => setAboutOpen(true)} />
 
       <SimulatorHero
@@ -123,7 +108,7 @@ export function SimulatorLanding() {
         }
       />
 
-      <div className="mx-3 mb-2 flex-1 border-0 bg-[#00ff00e6] px-4 py-4 text-sm leading-relaxed text-black sm:mx-4 sm:text-base">
+      <div className="mx-3 mb-2 flex-1 border-0 bg-[#00ff00e6] px-4 py-4 font-panel text-sm leading-relaxed text-black sm:mx-4 sm:text-base">
         <p className="whitespace-pre-wrap">{revealedText}</p>
       </div>
 
@@ -132,7 +117,7 @@ export function SimulatorLanding() {
           type="button"
           onClick={goToNext}
           disabled={!canStart}
-          className="w-full border-2 border-[#00ff00] bg-black px-4 py-3 text-center text-[10px] uppercase tracking-wide text-[#00ff00] transition-opacity enabled:hover:bg-[#0a1a0a] disabled:cursor-not-allowed disabled:opacity-40 sm:text-xs"
+          className="font-panel w-full border-2 border-[#00ff00] bg-black px-4 py-3 text-center text-[10px] uppercase tracking-wide text-[#00ff00] transition-opacity enabled:hover:bg-[#0a1a0a] disabled:cursor-not-allowed disabled:opacity-40 sm:text-xs"
         >
           Press y to begin
         </button>

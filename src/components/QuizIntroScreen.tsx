@@ -8,6 +8,7 @@ import { SimulatorFooter } from "@/components/SimulatorFooter";
 import { SimulatorHeader } from "@/components/SimulatorHeader";
 import { SimulatorHero } from "@/components/SimulatorHero";
 import { FIRST_QUESTION_ID } from "@/data/question-bank";
+import { useTypewriter } from "@/hooks/useTypewriter";
 import { useSimulatorStore } from "@/store/simulator-store";
 
 const INTRO_COPY =
@@ -21,6 +22,9 @@ export function QuizIntroScreen() {
   const success = useSimulatorStore((s) => s.success);
   const hspQuizCompleted = useSimulatorStore((s) => s.hspQuizCompleted);
   const resetProgress = useSimulatorStore((s) => s.resetProgress);
+
+  const { displayed: introText, done: introDone } =
+    useTypewriter(ready ? INTRO_COPY : "");
 
   useEffect(() => {
     const unsub = useSimulatorStore.persist.onFinishHydration(() => {
@@ -50,6 +54,7 @@ export function QuizIntroScreen() {
   };
 
   const begin = () => {
+    if (!introDone) return;
     router.push("/quiz/1");
   };
 
@@ -62,7 +67,7 @@ export function QuizIntroScreen() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-black font-mono text-[#e0e0e0]">
+    <div className="flex min-h-screen flex-col bg-black text-[#e0e0e0]">
       <SimulatorHeader onAbout={() => setAboutOpen(true)} />
 
       <SimulatorHero
@@ -74,15 +79,16 @@ export function QuizIntroScreen() {
         }
       />
 
-      <div className="mx-3 mb-4 flex-1 border-0 bg-[#00ff00e6] px-4 py-4 text-sm leading-relaxed text-black sm:mx-4 sm:text-base">
-        <p className="whitespace-pre-wrap">{INTRO_COPY}</p>
+      <div className="mx-3 mb-4 flex-1 border-0 bg-[#00ff00e6] px-4 py-4 font-panel text-sm leading-relaxed text-black sm:mx-4 sm:text-base">
+        <p className="whitespace-pre-wrap">{introText}</p>
       </div>
 
       <div className="mx-3 mb-4 sm:mx-4">
         <button
           type="button"
           onClick={begin}
-          className="w-full border-2 border-[#00ff00] bg-black px-4 py-3 text-center text-[10px] uppercase tracking-wide text-[#00ff00] transition-opacity hover:bg-[#0a1a0a] sm:text-xs"
+          disabled={!introDone}
+          className="font-panel w-full border-2 border-[#00ff00] bg-black px-4 py-3 text-center text-[10px] uppercase tracking-wide text-[#00ff00] transition-opacity enabled:hover:bg-[#0a1a0a] disabled:cursor-not-allowed disabled:opacity-40 sm:text-xs"
         >
           Begin
         </button>

@@ -4,7 +4,7 @@
  * Score = count of "True" answers. Energy baseline = 100 − (score × 2).
  */
 
-export const HSP_QUIZ_CUTOFF = 11;
+export const HSP_QUIZ_CUTOFF = 12;
 
 export const HSP_QUIZ_ITEMS: readonly string[] = [
   "I seem to be aware of subtleties in my environment.",

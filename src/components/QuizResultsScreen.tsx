@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AboutModal } from "@/components/AboutModal";
 import { ProgressBar } from "@/components/ProgressBar";
 import { SimulatorFooter } from "@/components/SimulatorFooter";
@@ -14,6 +14,7 @@ import {
   HSP_QUIZ_CUTOFF,
 } from "@/data/hsp-quiz";
 import { FIRST_QUESTION_ID } from "@/data/question-bank";
+import { useTypewriter } from "@/hooks/useTypewriter";
 import { useSimulatorStore } from "@/store/simulator-store";
 
 const BAR_MS = 1400;
@@ -33,6 +34,22 @@ export function QuizResultsScreen() {
   const resetProgress = useSimulatorStore((s) => s.resetProgress);
 
   const trueCount = countHspTrueAnswers(hspQuizAnswers);
+  const aboveCutoff = trueCount >= HSP_QUIZ_CUTOFF;
+
+  const narrativeBody = useMemo(() => {
+    const p1 = `Your score on this questionnaire was ${trueCount} / ${HSP_QUIZ_COUNT}.`;
+    const p2 = `The cutoff for sensory processing sensitivity is ${HSP_QUIZ_CUTOFF}.`;
+    const p3 = `${
+      aboveCutoff
+        ? "Your score is at or above that cutoff, which is often associated with higher sensory processing sensitivity."
+        : "Your score is below that cutoff on this measure."
+    } Your starting energy is set from this score: higher sensitivity (more “True” answers) lowers starting energy, reflecting how much capacity you may have left after processing your environment.`;
+    return `${p1}\n\n${p2}\n\n${p3}`;
+  }, [trueCount, aboveCutoff]);
+
+  const { displayed: typedNarrative, done: narrativeDone } = useTypewriter(
+    ready && hspQuizCompleted ? narrativeBody : "",
+  );
 
   useEffect(() => {
     const unsub = useSimulatorStore.persist.onFinishHydration(() => {
@@ -59,7 +76,7 @@ export function QuizResultsScreen() {
   }, [ready, hspQuizAnswers, hspQuizCompleted, finalizeHspQuiz, router]);
 
   useEffect(() => {
-    if (!ready || !hspQuizCompleted) return;
+    if (!ready || !hspQuizCompleted || !narrativeDone) return;
 
     const target = energy;
     setDisplayEnergy(0);
@@ -82,7 +99,7 @@ export function QuizResultsScreen() {
     return () => {
       cancelled = true;
     };
-  }, [ready, hspQuizCompleted, energy]);
+  }, [ready, hspQuizCompleted, narrativeDone, energy]);
 
   const handleReset = () => {
     if (
@@ -94,8 +111,6 @@ export function QuizResultsScreen() {
     }
   };
 
-  const aboveCutoff = trueCount >= HSP_QUIZ_CUTOFF;
-
   if (!ready) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-black font-mono text-[#00ff00]">
@@ -105,7 +120,7 @@ export function QuizResultsScreen() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-black font-mono text-[#e0e0e0]">
+    <div className="flex min-h-screen flex-col bg-black text-[#e0e0e0]">
       <SimulatorHeader onAbout={() => setAboutOpen(true)} />
 
       <SimulatorHero
@@ -121,23 +136,10 @@ export function QuizResultsScreen() {
         }
       />
 
-      <div className="mx-3 mb-4 flex-1 border-0 bg-[#00ff00e6] px-4 py-4 text-sm leading-relaxed text-black sm:mx-4 sm:text-base">
-        <p className="mb-3 font-bold">
-          Your score on this questionnaire was {trueCount} / {HSP_QUIZ_COUNT}.
-        </p>
-        <p className="mb-3">
-          The cutoff for sensory processing sensitivity is {HSP_QUIZ_CUTOFF}.
-        </p>
-        <p className="mb-3">
-          {aboveCutoff
-            ? `Your score is at or above that cutoff, which is often associated with higher sensory processing sensitivity.`
-            : `Your score is below that cutoff on this measure.`}{" "}
-          Your starting energy is set from this score: higher sensitivity
-          (more “True” answers) lowers starting energy, reflecting how much
-          capacity you may have left after processing your environment.
-        </p>
-        {!animationDone && (
-          <p className="text-[10px] text-[#333] sm:text-xs">
+      <div className="mx-3 mb-4 flex-1 border-0 bg-[#00ff00e6] px-4 py-4 font-panel text-sm leading-relaxed text-black sm:mx-4 sm:text-base">
+        <p className="whitespace-pre-wrap">{typedNarrative}</p>
+        {narrativeDone && !animationDone && (
+          <p className="mt-3 font-panel text-[10px] text-[#333] sm:text-xs">
             Calibrating energy…
           </p>
         )}
@@ -146,7 +148,7 @@ export function QuizResultsScreen() {
       <div className="mx-3 mb-4 sm:mx-4">
         <Link
           href={`/scenario/${FIRST_QUESTION_ID}`}
-          className={`block w-full border-2 border-[#00ff00] bg-black px-4 py-3 text-center text-[10px] uppercase tracking-wide text-[#00ff00] transition-opacity sm:text-xs ${
+          className={`font-panel block w-full border-2 border-[#00ff00] bg-black px-4 py-3 text-center text-[10px] uppercase tracking-wide text-[#00ff00] transition-opacity sm:text-xs ${
             animationDone
               ? "hover:bg-[#0a1a0a]"
               : "pointer-events-none opacity-40"
