@@ -28,14 +28,20 @@ export function SelfCareResultsScreen() {
   const success = useSimulatorStore((s) => s.success);
   const energy = useSimulatorStore((s) => s.energy);
   const hspQuizCompleted = useSimulatorStore((s) => s.hspQuizCompleted);
-  const selfCareQuizCompleted = useSimulatorStore((s) => s.selfCareQuizCompleted);
+  const selfCareQuizCompleted = useSimulatorStore(
+    (s) => s.selfCareQuizCompleted,
+  );
   const selfCarePointsAdded = useSimulatorStore((s) => s.selfCarePointsAdded);
   const selections = useSimulatorStore((s) => s.selfCareSelections);
   const resetProgress = useSimulatorStore((s) => s.resetProgress);
 
   const explanationCards = useMemo<Explanation[]>(() => {
-    const selected = SELF_CARE_ACTIVITIES.filter((_, index) => selections[index]);
-    const unselected = SELF_CARE_ACTIVITIES.filter((_, index) => !selections[index]);
+    const selected = SELF_CARE_ACTIVITIES.filter(
+      (_, index) => selections[index],
+    );
+    const unselected = SELF_CARE_ACTIVITIES.filter(
+      (_, index) => !selections[index],
+    );
 
     const cards: Explanation[] = selected.map((item) => ({
       id: `${item.id}-selected`,
@@ -114,25 +120,34 @@ export function SelfCareResultsScreen() {
 
       <div className="mx-3 mb-4 flex-1 overflow-y-auto border-0 bg-[#00ff00e6] px-4 py-4 font-panel text-sm leading-relaxed text-black sm:mx-4 sm:text-base">
         <p className="mb-3 whitespace-pre-wrap">
-          You just added {selfCarePointsAdded} points to your energy level based off
-          the self care exercises that you marked that you participate in on a weekly
-          basis. The number of points added are based on effect sizes from studies and
-          meta-analyses looking at the effect of these activities on overall mental
-          health and well-being. You were assigned 3 points for activities that had a
-          large effect size in the research literature, 2 points for activities that had
-          a moderate effect size, and 1 point for activities that had a small effect
-          size.
+          You just added {selfCarePointsAdded} points to your energy level based
+          off the self care exercises that you marked that you participate in on
+          a weekly basis. The number of points added are based on effect sizes
+          from studies and meta-analyses looking at the effect of these
+          activities on overall mental health and well-being. You were assigned
+          3 points for activities that had a large effect size in the research
+          literature, 2 points for activities that had a moderate effect size,
+          and 1 point for activities that had a small effect size.
         </p>
 
         <div className="space-y-3">
           {explanationCards.map((item) => (
-            <section key={item.id} className="border border-black/25 bg-white/40 p-2">
+            <section
+              key={item.id}
+              className="border border-black/25 bg-white/40 p-2"
+            >
               <p className="text-[10px] uppercase tracking-wide sm:text-xs">
                 {item.selected ? "Selected activity" : "Try adding this next"}
               </p>
-              <p className="mt-1 text-xs font-semibold sm:text-sm">{item.label}</p>
-              <p className="mt-1 text-xs font-semibold sm:text-sm">{item.title}</p>
-              <p className="mt-1 text-xs leading-snug sm:text-sm">{item.body}</p>
+              <p className="mt-1 text-xs font-semibold sm:text-sm">
+                {item.label}
+              </p>
+              <p className="mt-1 text-xs font-semibold sm:text-sm">
+                {item.title}
+              </p>
+              <p className="mt-1 text-xs leading-snug sm:text-sm">
+                {item.body}
+              </p>
             </section>
           ))}
         </div>

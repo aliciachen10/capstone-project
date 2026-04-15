@@ -21,11 +21,14 @@ export function QuizIntroScreen() {
 
   const success = useSimulatorStore((s) => s.success);
   const hspQuizCompleted = useSimulatorStore((s) => s.hspQuizCompleted);
-  const selfCareQuizCompleted = useSimulatorStore((s) => s.selfCareQuizCompleted);
+  const selfCareQuizCompleted = useSimulatorStore(
+    (s) => s.selfCareQuizCompleted,
+  );
   const resetProgress = useSimulatorStore((s) => s.resetProgress);
 
-  const { displayed: introText, done: introDone } =
-    useTypewriter(ready ? INTRO_COPY : "");
+  const { displayed: introText, done: introDone } = useTypewriter(
+    ready ? INTRO_COPY : "",
+  );
 
   useEffect(() => {
     const unsub = useSimulatorStore.persist.onFinishHydration(() => {
@@ -41,7 +44,9 @@ export function QuizIntroScreen() {
     if (!ready) return;
     if (hspQuizCompleted) {
       router.replace(
-        selfCareQuizCompleted ? `/scenario/${FIRST_QUESTION_ID}` : "/quiz/self-care/intro",
+        selfCareQuizCompleted
+          ? `/scenario/${FIRST_QUESTION_ID}`
+          : "/quiz/self-care/intro",
       );
     }
   }, [ready, hspQuizCompleted, selfCareQuizCompleted, router]);

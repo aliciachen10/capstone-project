@@ -1,14 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AboutModal } from "@/components/AboutModal";
 import { ProgressBar } from "@/components/ProgressBar";
 import { SimulatorFooter } from "@/components/SimulatorFooter";
 import { SimulatorHeader } from "@/components/SimulatorHeader";
 import { SimulatorHero } from "@/components/SimulatorHero";
 import type { Question } from "@/data/question-bank";
-import { getNextQuestionId } from "@/data/question-bank";
+import { countHspTrueAnswers } from "@/data/hsp-quiz";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import { useSimulatorStore } from "@/store/simulator-store";
 
@@ -22,36 +22,53 @@ export function ScenarioScreen({ question }: ScenarioScreenProps) {
 
   const energy = useSimulatorStore((s) => s.energy);
   const success = useSimulatorStore((s) => s.success);
-  const adjustEnergy = useSimulatorStore((s) => s.adjustEnergy);
-  const adjustSuccess = useSimulatorStore((s) => s.adjustSuccess);
+  const setEnergy = useSimulatorStore((s) => s.setEnergy);
+  const setSuccess = useSimulatorStore((s) => s.setSuccess);
   const hasAnswered = useSimulatorStore((s) =>
     s.hasAnsweredQuestion(question.id),
   );
   const markAnswered = useSimulatorStore((s) => s.markQuestionAnswered);
   const resetProgress = useSimulatorStore((s) => s.resetProgress);
+  const hspQuizAnswers = useSimulatorStore((s) => s.hspQuizAnswers);
+
+  const resolvedPrompt = useMemo(() => {
+    const spsScore = countHspTrueAnswers(hspQuizAnswers);
+    return question.prompt.replace(/\{\{SPS_SCORE\}\}/g, String(spsScore));
+  }, [question.prompt, hspQuizAnswers]);
 
   const { displayed: typedPrompt, done: promptDone } = useTypewriter(
-    question.prompt,
+    resolvedPrompt,
   );
 
   const handleChoice = useCallback(
-    (energyDelta: number, successDelta: number) => {
+    (choiceId: string, energyDelta: number, successDelta: number) => {
       if (hasAnswered || !promptDone) return;
-      adjustEnergy(energyDelta);
-      adjustSuccess(successDelta);
+      const nextEnergy = Math.max(0, Math.min(100, Math.round(energy + energyDelta)));
+      const nextSuccess = Math.max(
+        0,
+        Math.min(100, Math.round(success + successDelta)),
+      );
+      setEnergy(nextEnergy);
+      setSuccess(nextSuccess);
       markAnswered(question.id);
-      const next = getNextQuestionId(question.id);
-      if (next) {
-        router.push(`/scenario/${next}`);
+      if (nextEnergy === 0 || nextSuccess === 0) {
+        const depleted = nextEnergy === 0 ? "energy" : "success";
+        router.push(`/scenario/lost?stat=${depleted}`);
       } else {
-        router.push("/scenario/complete");
+        router.push(
+          `/scenario/consequence?questionId=${encodeURIComponent(
+            question.id,
+          )}&choiceId=${encodeURIComponent(choiceId)}&fromEnergy=${Math.round(energy)}&fromSuccess=${Math.round(success)}`,
+        );
       }
     },
     [
+      energy,
+      success,
       hasAnswered,
       promptDone,
-      adjustEnergy,
-      adjustSuccess,
+      setEnergy,
+      setSuccess,
       markAnswered,
       question.id,
       router,
@@ -66,7 +83,7 @@ export function ScenarioScreen({ question }: ScenarioScreenProps) {
       const choice = question.choices[n - 1];
       if (!choice) return;
       e.preventDefault();
-      handleChoice(choice.energyDelta, choice.successDelta);
+      handleChoice(choice.id, choice.energyDelta, choice.successDelta);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -111,7 +128,9 @@ export function ScenarioScreen({ question }: ScenarioScreenProps) {
             key={choice.id}
             type="button"
             disabled={hasAnswered || !promptDone}
-            onClick={() => handleChoice(choice.energyDelta, choice.successDelta)}
+            onClick={() =>
+              handleChoice(choice.id, choice.energyDelta, choice.successDelta)
+            }
             className="font-panel border-2 border-[#ff00ff] bg-black px-3 py-3 text-left text-[10px] leading-snug text-white transition-opacity enabled:hover:bg-[#1a0a1a] disabled:cursor-not-allowed disabled:opacity-40 sm:text-xs"
           >
             <span className="text-[#ffff00]">[{i + 1}]</span> {choice.label}
