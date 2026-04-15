@@ -60,14 +60,7 @@ export function QuizScreen({ questionNum }: QuizScreenProps) {
     if (index > firstUnanswered) {
       router.replace(`/quiz/${firstUnanswered + 1}`);
     }
-  }, [
-    ready,
-    hspQuizAnswers,
-    hspQuizCompleted,
-    index,
-    router,
-    finalizeHspQuiz,
-  ]);
+  }, [ready, hspQuizAnswers, hspQuizCompleted, index, router, finalizeHspQuiz]);
 
   const submitAnswer = useCallback(
     (value: boolean) => {

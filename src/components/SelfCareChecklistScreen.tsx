@@ -18,9 +18,13 @@ export function SelfCareChecklistScreen() {
   const success = useSimulatorStore((s) => s.success);
   const energy = useSimulatorStore((s) => s.energy);
   const hspQuizCompleted = useSimulatorStore((s) => s.hspQuizCompleted);
-  const selfCareQuizCompleted = useSimulatorStore((s) => s.selfCareQuizCompleted);
+  const selfCareQuizCompleted = useSimulatorStore(
+    (s) => s.selfCareQuizCompleted,
+  );
   const selections = useSimulatorStore((s) => s.selfCareSelections);
-  const toggleSelfCareSelection = useSimulatorStore((s) => s.toggleSelfCareSelection);
+  const toggleSelfCareSelection = useSimulatorStore(
+    (s) => s.toggleSelfCareSelection,
+  );
   const finalizeSelfCareQuiz = useSimulatorStore((s) => s.finalizeSelfCareQuiz);
   const resetProgress = useSimulatorStore((s) => s.resetProgress);
 
@@ -92,7 +96,9 @@ export function SelfCareChecklistScreen() {
       />
 
       <div className="mx-3 mb-4 flex-1 border-0 bg-[#00ff00e6] px-4 py-4 font-panel text-sm leading-relaxed text-black sm:mx-4 sm:text-base">
-        <p className="mb-3 whitespace-pre-wrap">Do you do any of the following?</p>
+        <p className="mb-3 whitespace-pre-wrap">
+          Do you do any of the following?
+        </p>
 
         <div className="space-y-2">
           {SELF_CARE_ACTIVITIES.map((activity, index) => {

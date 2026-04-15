@@ -92,6 +92,7 @@ export function SimulatorLanding() {
       <SimulatorHeader onAbout={() => setAboutOpen(true)} />
 
       <SimulatorHero
+        heroMode="title"
         stats={
           <>
             <ProgressBar

@@ -36,14 +36,16 @@ export function ScenarioScreen({ question }: ScenarioScreenProps) {
     return question.prompt.replace(/\{\{SPS_SCORE\}\}/g, String(spsScore));
   }, [question.prompt, hspQuizAnswers]);
 
-  const { displayed: typedPrompt, done: promptDone } = useTypewriter(
-    resolvedPrompt,
-  );
+  const { displayed: typedPrompt, done: promptDone } =
+    useTypewriter(resolvedPrompt);
 
   const handleChoice = useCallback(
     (choiceId: string, energyDelta: number, successDelta: number) => {
       if (hasAnswered || !promptDone) return;
-      const nextEnergy = Math.max(0, Math.min(100, Math.round(energy + energyDelta)));
+      const nextEnergy = Math.max(
+        0,
+        Math.min(100, Math.round(energy + energyDelta)),
+      );
       const nextSuccess = Math.max(
         0,
         Math.min(100, Math.round(success + successDelta)),

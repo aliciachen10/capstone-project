@@ -65,7 +65,7 @@ export function ScenarioLostScreen({ stat }: ScenarioLostScreenProps) {
 
       <div className="mx-3 mb-4 flex-1 border-0 bg-[#00ff00e6] px-4 py-4 font-panel text-sm leading-relaxed text-black sm:mx-4 sm:text-base">
         <p className="whitespace-pre-wrap">
-          {`you just lost the counseling student simulation game. :( your ${stat} dropped below 0. press reset progress at the bottom right hand side of the screen to restart the simulation.`}
+          {`You dropped out of the program. :( your ${stat} dropped below 0. press reset progress at the bottom right hand side of the screen to restart the simulation.`}
         </p>
       </div>
 
