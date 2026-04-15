@@ -13,7 +13,6 @@ import {
   HSP_QUIZ_COUNT,
   HSP_QUIZ_CUTOFF,
 } from "@/data/hsp-quiz";
-import { FIRST_QUESTION_ID } from "@/data/question-bank";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import { useSimulatorStore } from "@/store/simulator-store";
 
@@ -147,7 +146,7 @@ export function QuizResultsScreen() {
 
       <div className="mx-3 mb-4 sm:mx-4">
         <Link
-          href={`/scenario/${FIRST_QUESTION_ID}`}
+          href="/quiz/self-care/intro"
           className={`font-panel block w-full border-2 border-[#00ff00] bg-black px-4 py-3 text-center text-[10px] uppercase tracking-wide text-[#00ff00] transition-opacity sm:text-xs ${
             animationDone
               ? "hover:bg-[#0a1a0a]"
@@ -155,7 +154,7 @@ export function QuizResultsScreen() {
           }`}
           aria-disabled={!animationDone}
         >
-          Continue to scenarios
+          Continue
         </Link>
       </div>
 

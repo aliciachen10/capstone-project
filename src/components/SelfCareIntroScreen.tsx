@@ -7,25 +7,25 @@ import { ProgressBar } from "@/components/ProgressBar";
 import { SimulatorFooter } from "@/components/SimulatorFooter";
 import { SimulatorHeader } from "@/components/SimulatorHeader";
 import { SimulatorHero } from "@/components/SimulatorHero";
+import { SELF_CARE_INTRO_COPY } from "@/data/self-care-quiz";
 import { FIRST_QUESTION_ID } from "@/data/question-bank";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import { useSimulatorStore } from "@/store/simulator-store";
 
-const INTRO_COPY =
-  "You will now take a quiz that assesses how you relate to and process sensory stimuli before you start the scenarios. Are you ready to begin?";
-
-export function QuizIntroScreen() {
+export function SelfCareIntroScreen() {
   const router = useRouter();
   const [aboutOpen, setAboutOpen] = useState(false);
   const [ready, setReady] = useState(false);
 
   const success = useSimulatorStore((s) => s.success);
+  const energy = useSimulatorStore((s) => s.energy);
   const hspQuizCompleted = useSimulatorStore((s) => s.hspQuizCompleted);
   const selfCareQuizCompleted = useSimulatorStore((s) => s.selfCareQuizCompleted);
   const resetProgress = useSimulatorStore((s) => s.resetProgress);
 
-  const { displayed: introText, done: introDone } =
-    useTypewriter(ready ? INTRO_COPY : "");
+  const { displayed: introText, done: introDone } = useTypewriter(
+    ready ? SELF_CARE_INTRO_COPY : "",
+  );
 
   useEffect(() => {
     const unsub = useSimulatorStore.persist.onFinishHydration(() => {
@@ -39,10 +39,12 @@ export function QuizIntroScreen() {
 
   useEffect(() => {
     if (!ready) return;
-    if (hspQuizCompleted) {
-      router.replace(
-        selfCareQuizCompleted ? `/scenario/${FIRST_QUESTION_ID}` : "/quiz/self-care/intro",
-      );
+    if (!hspQuizCompleted) {
+      router.replace("/quiz/intro");
+      return;
+    }
+    if (selfCareQuizCompleted) {
+      router.replace(`/scenario/${FIRST_QUESTION_ID}`);
     }
   }, [ready, hspQuizCompleted, selfCareQuizCompleted, router]);
 
@@ -54,11 +56,6 @@ export function QuizIntroScreen() {
       resetProgress();
       router.push("/");
     }
-  };
-
-  const begin = () => {
-    if (!introDone) return;
-    router.push("/quiz/1");
   };
 
   if (!ready) {
@@ -76,7 +73,7 @@ export function QuizIntroScreen() {
       <SimulatorHero
         stats={
           <>
-            <ProgressBar label="Energy" value={0} smoothWidth={false} />
+            <ProgressBar label="Energy" value={energy} smoothWidth={false} />
             <ProgressBar label="Success" value={success} />
           </>
         }
@@ -89,11 +86,11 @@ export function QuizIntroScreen() {
       <div className="mx-3 mb-4 sm:mx-4">
         <button
           type="button"
-          onClick={begin}
+          onClick={() => introDone && router.push("/quiz/self-care/checklist")}
           disabled={!introDone}
           className="font-panel w-full border-2 border-[#00ff00] bg-black px-4 py-3 text-center text-[10px] uppercase tracking-wide text-[#00ff00] transition-opacity enabled:hover:bg-[#0a1a0a] disabled:cursor-not-allowed disabled:opacity-40 sm:text-xs"
         >
-          Begin
+          Continue
         </button>
       </div>
 

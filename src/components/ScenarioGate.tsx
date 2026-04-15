@@ -7,7 +7,8 @@ import { useSimulatorStore } from "@/store/simulator-store";
 export function ScenarioGate({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [ready, setReady] = useState(false);
-  const completed = useSimulatorStore((s) => s.hspQuizCompleted);
+  const hspCompleted = useSimulatorStore((s) => s.hspQuizCompleted);
+  const selfCareCompleted = useSimulatorStore((s) => s.selfCareQuizCompleted);
 
   useEffect(() => {
     const unsub = useSimulatorStore.persist.onFinishHydration(() => {
@@ -21,8 +22,14 @@ export function ScenarioGate({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!ready) return;
-    if (!completed) router.replace("/quiz/intro");
-  }, [ready, completed, router]);
+    if (!hspCompleted) {
+      router.replace("/quiz/intro");
+      return;
+    }
+    if (!selfCareCompleted) {
+      router.replace("/quiz/self-care/intro");
+    }
+  }, [ready, hspCompleted, selfCareCompleted, router]);
 
   if (!ready) {
     return (
@@ -31,6 +38,6 @@ export function ScenarioGate({ children }: { children: React.ReactNode }) {
       </div>
     );
   }
-  if (!completed) return null;
+  if (!hspCompleted || !selfCareCompleted) return null;
   return <>{children}</>;
 }
