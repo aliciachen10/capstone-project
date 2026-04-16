@@ -112,7 +112,12 @@ export function SelfCareResultsScreen() {
       <SimulatorHero
         stats={
           <>
-            <ProgressBar label="Energy" value={energy} smoothWidth={false} />
+            <ProgressBar
+              label="Energy"
+              value={energy}
+              smoothWidth={false}
+              delta={selfCarePointsAdded}
+            />
             <ProgressBar label="Success" value={success} />
           </>
         }

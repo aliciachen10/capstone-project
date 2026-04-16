@@ -37,6 +37,15 @@ export function ScenarioConsequenceScreen({
   const success = useSimulatorStore((s) => s.success);
   const resetProgress = useSimulatorStore((s) => s.resetProgress);
 
+  const energyDelta =
+    typeof fromEnergy === "number" && !Number.isNaN(fromEnergy)
+      ? Math.round(energy - fromEnergy)
+      : null;
+  const successDelta =
+    typeof fromSuccess === "number" && !Number.isNaN(fromSuccess)
+      ? Math.round(success - fromSuccess)
+      : null;
+
   useEffect(() => {
     const unsub = useSimulatorStore.persist.onFinishHydration(() => {
       setReady(true);
@@ -129,8 +138,16 @@ export function ScenarioConsequenceScreen({
       <SimulatorHero
         stats={
           <>
-            <ProgressBar label="Energy" value={displayEnergy} />
-            <ProgressBar label="Success" value={displaySuccess} />
+            <ProgressBar
+              label="Energy"
+              value={displayEnergy}
+              delta={energyDelta}
+            />
+            <ProgressBar
+              label="Success"
+              value={displaySuccess}
+              delta={successDelta}
+            />
           </>
         }
       />

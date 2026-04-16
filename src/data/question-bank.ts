@@ -23,7 +23,7 @@ export const questions: Record<string, Question> = {
   "consultancy-project": {
     id: "consultancy-project",
     prompt:
-      "While you are in school, you are working at a small consultancy for technology projects and are handed a challenging project where you have to do all the work from scratch (no one has done any of this stuff before, so there are no answers or guidance online, and AI doesn’t help). During this time, you’re still balancing classes and seeing patients at your site. What do you do?",
+      "While you are in school, you are working part-time and are handed a challenging project where you have to do all the work from scratch. You have little or no guidance from your coworkers and cannot find guidance online. You are unsure whether it's even possible to complete the project on a merely part-time basis. During this time, you’re still balancing classes and seeing patients at your site. What do you do?",
     choices: [
       {
         id: "quit",
@@ -65,7 +65,7 @@ export const questions: Record<string, Question> = {
   "roommate-conflict": {
     id: "roommate-conflict",
     prompt:
-      "You just moved into your grad student housing on the corner of Polo & Friendship (only about a 15 minute walk from where classes are in Carswell). Things seem to be going well, except for the fact that one of your roommates seems to be extremely particular about how things are in the house. She constantly texts the group chat pictures of misplaced things and seems to be annoyed and angry when other people are in the kitchen when she is around. you have had several direct conversations with her sharing each others’ expectations about the space, and addressing her feelings about what is going on, attempting to take responsibility for anything that was due to your behavior, but this does not seem to have solved the problem. The most alarming thing is that once you left your clothes in the washer, and she took them out in the morning and stuck them in the freezer so that they were a frozen block when you checked for them in the morning. What do you do?",
+      "You just moved into your grad student housing with two roommates. Things seem to be going well, except for the fact that one of your roommates seems to be extremely particular about how things are in the house. She constantly texts the group chat pictures of misplaced things and seems to be annoyed and angry. you have had several direct conversations with her attempting to address the issues, but this does not seem to have solved the problem. The tension has risen to the point where you are afraid of her, and dread going home. What do you do?",
     choices: [
       {
         id: "move-out",
@@ -99,7 +99,7 @@ export const questions: Record<string, Question> = {
   "intern-office-noise": {
     id: "intern-office-noise",
     prompt:
-      "You work in an office with 8 other interns. On Mondays and Wednesdays, most interns are in and they like to chat when you are around. Remember your score on the SPS scale. Constant background noise is exhausting for you and puts you on edge. What do you do?",
+      "You work in an office with 8 other interns. On Mondays and Wednesdays, most interns are in and they like to chat when you are around. Constant background noise is exhausting, keeps you from focusing on documentation, filing notes on time, and puts you on edge. What do you do?",
     choices: [
       {
         id: "stay-change-nothing",
@@ -141,7 +141,7 @@ export const questions: Record<string, Question> = {
   "aspen-fellowship-application": {
     id: "aspen-fellowship-application",
     prompt:
-      "You are interested in applying for a social impact policy fellowship at the Aspen Institute to learn how to do some behavioral healthcare policy work after graduation, as your dream has always been to impact the behavioral health space at a large scale, particularly for improving the quality of care that providers deliver. The fellowship pays $7k for 6 weeks, with 2 weeks in person in San Francisco. However, the application is due tonight, and you just did class from 9am-4:45pm and had a stressful conversation for 2 hours with someone you have been dating. It is now 7pm and the application is due at midnight. the questions on the application are extremely detailed, and some involve writing a memo to a thought leader in the space as a policy proposal, talking about what you want to get out of the program, and so on and so forth. What do you do?",
+      "You are interested in applying for a policy fellowship with a stipend to learn how to do some behavioral healthcare policy work. However, the application is due tonight, and you just did class from 9am-4:45pm and had a stressful conversation for 2 hours. It is now 7pm and the application is due at midnight. The questions on the application require extremely detailed answers. What do you do?",
     choices: [
       {
         id: "apply-tough-friday",
@@ -184,7 +184,7 @@ export const questions: Record<string, Question> = {
   "theory-case-tape-crisis": {
     id: "theory-case-tape-crisis",
     prompt:
-      "You have had a super busy week and have been at your site over the number of hours that you usually are. In the past week, you've had to write up two papers and it's 7pm. You are feeling about ready to get started getting ready for bed and be in bed reading a book in two hours due to the level of work and exhaustion. You are just bone tired and ready for the semester to be over. But you get the weird feeling something is wrong. You check your email. Looks like you were right: Your university supervisor has emailed you and tells you that you are presenting your theory case presentation tomorrow and she still hasn't received a tape from you yet. What do you do?",
+      "You have had a super busy week with late nights at your site and multiple papers due. It's late at night. You are just bone tired. But you get the weird feeling something is wrong. You check your email. Bad news: your university supervisor has emailed you, telling you that you are presenting your theory case presentation tomorrow and she still hasn't received a tape from you yet. What do you do?",
     choices: [
       {
         id: "wrong-week-follow-up",

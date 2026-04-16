@@ -37,12 +37,12 @@ export function QuizResultsScreen() {
 
   const narrativeBody = useMemo(() => {
     const p1 = `Your score on this questionnaire was ${trueCount} / ${HSP_QUIZ_COUNT}.`;
-    const p2 = `The cutoff for sensory processing sensitivity is ${HSP_QUIZ_CUTOFF}.`;
+    const p2 = `The cutoff for sensory processing sensitivity is ${HSP_QUIZ_CUTOFF}. This quiz was developed by Elaine Aron (sensory processing sensitivity researcher) to give people an idea of where they might be in terms of their degree of sensory processing sensitivity (SPS). SPS is a temperamental or personality trait involving "an increased sensitivity of the central nervous system and a deeper cognitive processing of physical, social, and emotional stimuli".The trait is characterized by "a tendency to 'pause to check' in novel situations, greater sensitivity to subtle stimuli, and the engagement of deeper cognitive processing strategies for employing coping actions, all of which is driven by heightened emotional reactivity, both positive and negative".`;
     const p3 = `${
       aboveCutoff
         ? "Your score is at or above that cutoff, which is often associated with higher sensory processing sensitivity."
         : "Your score is below that cutoff on this measure."
-    } Your starting energy is set from this score: higher sensitivity (more “True” answers) lowers starting energy, reflecting how much capacity you may have left after processing your environment.`;
+    } Your starting energy is set from this score: for the purposes of this game, higher sensitivity (more “True” answers) lowers starting energy, reflecting how much capacity you may have left after processing your environment.`;
     return `${p1}\n\n${p2}\n\n${p3}`;
   }, [trueCount, aboveCutoff]);
 
