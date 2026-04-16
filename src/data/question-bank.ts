@@ -16,12 +16,15 @@ export type Question = {
   id: string;
   /** Shown in the green narrative box */
   prompt: string;
+  /** Optional CRT hero image (path under /public). */
+  heroImageSrc?: string;
   choices: Choice[];
 };
 
 export const questions: Record<string, Question> = {
   "consultancy-project": {
     id: "consultancy-project",
+    heroImageSrc: "/images/scenarios/consultancy.jpg",
     prompt:
       "While you are in school, you are working part-time and are handed a challenging project where you have to do all the work from scratch. You have little or no guidance from your coworkers and cannot find guidance online. You are unsure whether it's even possible to complete the project on a merely part-time basis. During this time, you’re still balancing classes and seeing patients at your site. What do you do?",
     choices: [
@@ -64,6 +67,7 @@ export const questions: Record<string, Question> = {
   },
   "roommate-conflict": {
     id: "roommate-conflict",
+    heroImageSrc: "/images/scenarios/roommate.png",
     prompt:
       "You just moved into your grad student housing with two roommates. Things seem to be going well, except for the fact that one of your roommates seems to be extremely particular about how things are in the house. She constantly texts the group chat pictures of misplaced things and seems to be annoyed and angry. you have had several direct conversations with her attempting to address the issues, but this does not seem to have solved the problem. The tension has risen to the point where you are afraid of her, and dread going home. What do you do?",
     choices: [
@@ -98,6 +102,7 @@ export const questions: Record<string, Question> = {
   },
   "intern-office-noise": {
     id: "intern-office-noise",
+    heroImageSrc: "/images/scenarios/office.jpg",
     prompt:
       "You work in an office with 8 other interns. On Mondays and Wednesdays, most interns are in and they like to chat when you are around. Constant background noise is exhausting, keeps you from focusing on documentation, filing notes on time, and puts you on edge. What do you do?",
     choices: [
@@ -140,6 +145,7 @@ export const questions: Record<string, Question> = {
   },
   "aspen-fellowship-application": {
     id: "aspen-fellowship-application",
+    heroImageSrc: "/images/scenarios/application.jpg",
     prompt:
       "You are interested in applying for a policy fellowship with a stipend to learn how to do some behavioral healthcare policy work. However, the application is due tonight, and you just did class from 9am-4:45pm and had a stressful conversation for 2 hours. It is now 7pm and the application is due at midnight. The questions on the application require extremely detailed answers. What do you do?",
     choices: [
@@ -183,6 +189,7 @@ export const questions: Record<string, Question> = {
   },
   "theory-case-tape-crisis": {
     id: "theory-case-tape-crisis",
+    heroImageSrc: "/images/scenarios/tape.jpg",
     prompt:
       "You have had a super busy week with late nights at your site and multiple papers due. It's late at night. You are just bone tired. But you get the weird feeling something is wrong. You check your email. Bad news: your university supervisor has emailed you, telling you that you are presenting your theory case presentation tomorrow and she still hasn't received a tape from you yet. What do you do?",
     choices: [
@@ -226,6 +233,7 @@ export const questions: Record<string, Question> = {
   },
   "competence-worry-skills": {
     id: "competence-worry-skills",
+    heroImageSrc: "/images/scenarios/skills.jpg",
     prompt:
       "You find yourself in your head a lot because you worry about how you are being perceived and whether you are competent in sessions with your patients. When beginning a new skill, you know that it is typical to feel like you don't know what you're doing, especially when you are still trying to get your bearings. What do you do?",
     choices: [

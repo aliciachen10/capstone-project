@@ -23,6 +23,7 @@ export function QuizResultsScreen() {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [ready, setReady] = useState(false);
   const [displayEnergy, setDisplayEnergy] = useState(0);
+  const [displaySuccess, setDisplaySuccess] = useState(0);
   const [animationDone, setAnimationDone] = useState(false);
 
   const success = useSimulatorStore((s) => s.success);
@@ -42,7 +43,7 @@ export function QuizResultsScreen() {
       aboveCutoff
         ? "Your score is at or above that cutoff, which is often associated with higher sensory processing sensitivity."
         : "Your score is below that cutoff on this measure."
-    } Your starting energy is set from this score: for the purposes of this game, higher sensitivity (more “True” answers) lowers starting energy, reflecting how much capacity you may have left after processing your environment.`;
+    } Your starting energy is set from this score: for the purposes of this game, higher sensitivity (more “True” answers) lowers starting energy, reflecting how much capacity you may have left after processing your environment. Conversely, higher sensitivity increases your degree of empathy and attunement to others, and increases starting success.`;
     return `${p1}\n\n${p2}\n\n${p3}`;
   }, [trueCount, aboveCutoff]);
 
@@ -77,8 +78,10 @@ export function QuizResultsScreen() {
   useEffect(() => {
     if (!ready || !hspQuizCompleted || !narrativeDone) return;
 
-    const target = energy;
+    const targetEnergy = energy;
+    const targetSuccess = success;
     setDisplayEnergy(0);
+    setDisplaySuccess(0);
     setAnimationDone(false);
     let cancelled = false;
     const start = performance.now();
@@ -87,7 +90,8 @@ export function QuizResultsScreen() {
       if (cancelled) return;
       const t = Math.min(1, (now - start) / BAR_MS);
       const ease = 1 - (1 - t) ** 3;
-      setDisplayEnergy(Math.round(target * ease));
+      setDisplayEnergy(Math.round(targetEnergy * ease));
+      setDisplaySuccess(Math.round(targetSuccess * ease));
       if (t < 1) {
         requestAnimationFrame(frame);
       } else {
@@ -98,7 +102,7 @@ export function QuizResultsScreen() {
     return () => {
       cancelled = true;
     };
-  }, [ready, hspQuizCompleted, narrativeDone, energy]);
+  }, [ready, hspQuizCompleted, narrativeDone, energy, success]);
 
   const handleReset = () => {
     if (
@@ -130,7 +134,11 @@ export function QuizResultsScreen() {
               value={displayEnergy}
               smoothWidth={false}
             />
-            <ProgressBar label="Success" value={success} />
+            <ProgressBar
+              label="Success"
+              value={displaySuccess}
+              smoothWidth={false}
+            />
           </>
         }
       />

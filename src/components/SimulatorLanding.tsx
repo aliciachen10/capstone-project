@@ -19,10 +19,11 @@ export function SimulatorLanding() {
   const [aboutOpen, setAboutOpen] = useState(false);
   const energyFromStore = useSimulatorStore((s) => s.energy);
   const hspQuizCompleted = useSimulatorStore((s) => s.hspQuizCompleted);
-  const targetSuccess = useSimulatorStore((s) => s.success);
+  const successFromStore = useSimulatorStore((s) => s.success);
   const resetProgress = useSimulatorStore((s) => s.resetProgress);
 
   const targetEnergy = hspQuizCompleted ? energyFromStore : 0;
+  const targetSuccess = hspQuizCompleted ? successFromStore : 0;
 
   const [displayEnergy, setDisplayEnergy] = useState(0);
   const [displaySuccess, setDisplaySuccess] = useState(0);

@@ -1,7 +1,7 @@
 /** Full text shown in the green intro box (typewriter reveal). */
 export const LANDING_NARRATIVE = `Welcome to the Counseling Student Simulator.
 
-You are stepping into the role of a counseling student navigating a two-year program at Wake Forest University. You will take a couple of quizzes to determine what your beginning level of energy is, and then proceed through the program making choices that maximize your energy and success. 
+You are stepping into the role of a counseling student navigating a two-year program at Wake Forest University. You will take a couple of quizzes to determine what your beginning level of energy and success are, and then proceed through the program making choices that maximize those values. 
 
 Note: 
 

@@ -38,7 +38,7 @@ export const HSP_QUIZ_ITEMS: readonly string[] = [
 export const HSP_QUIZ_COUNT = HSP_QUIZ_ITEMS.length;
 
 export function computeEnergyFromHspTrueCount(trueCount: number): number {
-  const raw = 100 - trueCount * 2;
+  const raw = 80 - trueCount * 2;
   return Math.max(0, Math.min(100, Math.round(raw)));
 }
 

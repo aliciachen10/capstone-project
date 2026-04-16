@@ -55,6 +55,7 @@ export function ScenarioLostScreen({ stat }: ScenarioLostScreenProps) {
       <SimulatorHeader onAbout={() => setAboutOpen(true)} />
 
       <SimulatorHero
+        crtImageSrc="/images/dropout.jpeg"
         stats={
           <>
             <ProgressBar label="Energy" value={energy} />

@@ -15,6 +15,7 @@ const BAR_MS = 1400;
 type ScenarioConsequenceScreenProps = {
   consequenceText: string;
   nextHref: string;
+  crtImageSrc?: string;
   /** Pre-choice energy (0–100) for bar animation; omit to show store value with no tween. */
   fromEnergy?: number;
   /** Pre-choice success (0–100) for bar animation. */
@@ -24,6 +25,7 @@ type ScenarioConsequenceScreenProps = {
 export function ScenarioConsequenceScreen({
   consequenceText,
   nextHref,
+  crtImageSrc,
   fromEnergy,
   fromSuccess,
 }: ScenarioConsequenceScreenProps) {
@@ -136,6 +138,7 @@ export function ScenarioConsequenceScreen({
       <SimulatorHeader onAbout={() => setAboutOpen(true)} />
 
       <SimulatorHero
+        crtImageSrc={crtImageSrc}
         stats={
           <>
             <ProgressBar

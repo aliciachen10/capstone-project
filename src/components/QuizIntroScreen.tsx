@@ -82,7 +82,7 @@ export function QuizIntroScreen() {
         stats={
           <>
             <ProgressBar label="Energy" value={0} smoothWidth={false} />
-            <ProgressBar label="Success" value={success} />
+            <ProgressBar label="Success" value={hspQuizCompleted ? success : 0} />
           </>
         }
       />

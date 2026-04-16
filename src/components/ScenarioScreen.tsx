@@ -105,6 +105,7 @@ export function ScenarioScreen({ question }: ScenarioScreenProps) {
       <SimulatorHeader onAbout={() => setAboutOpen(true)} />
 
       <SimulatorHero
+        crtImageSrc={question.heroImageSrc}
         stats={
           <>
             <ProgressBar label="Energy" value={energy} />

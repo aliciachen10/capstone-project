@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { ScenarioConsequenceScreen } from "@/components/ScenarioConsequenceScreen";
-import { getChoice, getNextQuestionId } from "@/data/question-bank";
+import { getChoice, getNextQuestionId, getQuestion } from "@/data/question-bank";
 
 function parseStatParam(v: string | undefined): number | undefined {
   if (v == null || v === "") return undefined;
@@ -25,6 +25,8 @@ export default async function ScenarioConsequencePage({
 
   const choice = getChoice(questionId, choiceId);
   if (!choice) notFound();
+  const question = getQuestion(questionId);
+  if (!question) notFound();
 
   const next = getNextQuestionId(questionId);
   const nextHref = next ? `/scenario/${next}` : "/scenario/complete";
@@ -33,6 +35,7 @@ export default async function ScenarioConsequencePage({
     <ScenarioConsequenceScreen
       consequenceText={choice.consequenceText}
       nextHref={nextHref}
+      crtImageSrc={question.heroImageSrc}
       fromEnergy={parseStatParam(fromEnergyRaw)}
       fromSuccess={parseStatParam(fromSuccessRaw)}
     />

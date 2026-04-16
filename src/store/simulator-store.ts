@@ -14,7 +14,7 @@ const emptySelfCareSelections = (): boolean[] =>
 
 const INITIAL = {
   energy: 0,
-  success: 50,
+  success: 30,
   answeredQuestionIds: [] as string[],
   hspQuizAnswers: emptyQuizAnswers(),
   hspQuizCompleted: false,
@@ -80,7 +80,8 @@ export const useSimulatorStore = create<SimulatorState>()(
         const answers = get().hspQuizAnswers;
         const trueCount = countHspTrueAnswers(answers);
         const energy = computeEnergyFromHspTrueCount(trueCount);
-        set({ energy, hspQuizCompleted: true });
+        const success = 30 + trueCount;
+        set({ energy, success, hspQuizCompleted: true });
       },
       toggleSelfCareSelection: (index) =>
         set((s) => {
